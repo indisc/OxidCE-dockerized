@@ -55,3 +55,16 @@ RUN chown -R www-data:www-data /data/www/oxid/public
 
 # Execute supervisord
 CMD /usr/bin/supervisord -n
+
+# Create MySQL Database oxid_db and user oxid_user (the MySQL root password is
+# empty).
+# During OXID installation use following values:
+#     Database hostname or IP:  localhost
+#     Database name:            oxid_db
+#     Database username:        oxid_user
+#     Database password:        needstobefixed
+RUN /usr/sbin/mysqld & \
+    sleep 10s && \
+    mysql -u root -e "CREATE DATABASE oxid_db;" && \
+    mysql -u root -e "GRANT ALL PRIVILEGES ON oxid_db.* TO 'oxid_user'@'localhost' IDENTIFIED BY 'needstobefixed';" && \
+    mysql -u root -e "FLUSH PRIVILEGES;"
